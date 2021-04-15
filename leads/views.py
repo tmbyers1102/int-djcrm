@@ -1,5 +1,7 @@
+import logging
 from django.contrib import messages
 from django.core.mail import send_mail
+from django.http.response import JsonResponse
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
@@ -15,6 +17,8 @@ from .forms import (
     CategoryModelForm
 )
 
+
+logger = logging.getLogger(__name__)
 
 # CRUD+L - Create, Retrieve, Update and Delete + List
 
@@ -54,7 +58,8 @@ class LeadListView(LoginRequiredMixin, generic.ListView):
             )
             # filter for the agent that is logged in
             queryset = queryset.filter(agent__user=user)
-        # messages.success(self.request, "You have successfully created a lead!")
+        # this is just a test showing how logging works, see LOGGING in settings.py to see other setup
+        logger.warning("This is test warning")
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -376,3 +381,15 @@ class LeadCategoryUpdateView(LoginRequiredMixin, generic.UpdateView):
     #     "form": form
     # }
 #     return render(request, "leads/lead_create.html", context)
+
+
+class LeadJsonView(generic.View):
+    
+    def get(self, request, *args, **kwargs):
+
+        qs = list(Lead.objects.all().values("first_name", "last_name"))
+
+        return JsonResponse({
+            "qs": qs,
+            "age": 25
+        })
