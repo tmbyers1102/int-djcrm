@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -53,6 +54,7 @@ class LeadListView(LoginRequiredMixin, generic.ListView):
             )
             # filter for the agent that is logged in
             queryset = queryset.filter(agent__user=user)
+        # messages.success(self.request, "You have successfully created a lead!")
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -118,6 +120,7 @@ class LeadCreateView(OrganisorAndLoginRequiredMixin, generic.CreateView):
             from_email="test@test.com",
             recipient_list=["test2@test.com"]
         )
+        messages.success(self.request, "You have successfully created a lead!")
         return super(LeadCreateView, self).form_valid(form)
 
 
