@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, UsernameField
 from .models import Lead, Agent, Category
@@ -18,6 +19,25 @@ class LeadModelForm(forms.ModelForm):
             'phone_number',
             'email',
         )
+
+    # this is how we can add custom validation on fields. Like, if you wanted
+    # all emails to contain a int you could put that logic in here
+    def clean_first_name(self):
+        data = self.cleaned_data["first_name"]
+        # if data != "Joe":
+        #     raise ValidationError("Your name ain't Joe!")
+        return data
+
+    # this is how we can add custom validation on fields. Like, if you wanted
+    # all emails to contain a int you could put that logic in here
+    # this is a more blanket validation to see if 2+ fields are to your liking.
+    # The one above is a specific field
+    def clean(self):
+        pass
+        # first_name = self.cleaned_data["first_name"]
+        # last_name = self.cleaned_data["last_name"]
+        # if first_name + last_name != "Joe Soap":
+        #     raise ValidationError("You ain't Joe Soap!")
 
 
 class LeadForm(forms.Form):
