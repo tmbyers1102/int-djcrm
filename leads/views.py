@@ -76,6 +76,7 @@ class DashboardView(OrganisorAndLoginRequiredMixin, generic.TemplateView):
         })
         return context
 
+
 def landing_page(request):
     return render(request, "landing.html")
 
@@ -194,6 +195,11 @@ class LeadUpdateView(OrganisorAndLoginRequiredMixin, generic.UpdateView):
 
     def get_success_url(self):
         return reverse("leads:lead-list")
+
+    def form_valid(self, form):
+        form.save()
+        messages.info(self.request, "Lead Updated!")
+        return super(LeadUpdateView, self).form_valid(form)
 
 
 def lead_update(request, pk):
