@@ -1,7 +1,7 @@
 import logging
 import datetime
 from django.contrib import messages
-from django.core.mail import send_mail
+# from django.core.mail import send_mail
 from django.http.response import JsonResponse
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -161,12 +161,12 @@ class LeadCreateView(OrganisorAndLoginRequiredMixin, generic.CreateView):
         lead = form.save(commit=False)
         lead.organisation = self.request.user.userprofile
         lead.save()
-        send_mail(
-            subject="A lead has been created",
-            message="Go to the site to see the new lead",
-            from_email="test@test.com",
-            recipient_list=["test2@test.com"]
-        )
+        # send_mail(
+        #     subject="A lead has been created",
+        #     message="Go to the site to see the new lead",
+        #     from_email="test@test.com",
+        #     recipient_list=["test2@test.com"]
+        # )
         messages.success(self.request, "You have successfully created a lead!")
         return super(LeadCreateView, self).form_valid(form)
 
@@ -397,7 +397,6 @@ class LeadCategoryUpdateView(LoginRequiredMixin, generic.UpdateView):
                 instance.converted_date = datetime.datetime.now()
         instance.save()
         return super(LeadCategoryUpdateView, self).form_valid(form)
-
 
 
 class FollowUpCreateView(LoginRequiredMixin, generic.CreateView):
